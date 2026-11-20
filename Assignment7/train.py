@@ -3,7 +3,7 @@ import pandas as pd
 import joblib
 
 from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
 # Dataset path
@@ -48,12 +48,17 @@ X_train, X_test, y_train, y_test = train_test_split(
     X,
     y,
     test_size=0.25,
-    random_state=1,
+    random_state=42,
     stratify=y
 )
 
-# Train Decision Tree model
-model = DecisionTreeClassifier(random_state=1)
+# Train Random Forest model
+model = RandomForestClassifier(
+    n_estimators=100,
+    max_depth=3,
+    random_state=42,
+    class_weight="balanced"
+)
 
 model.fit(X_train, y_train)
 
