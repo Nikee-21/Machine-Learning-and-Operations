@@ -1,0 +1,37 @@
+@'
+# Python virtual environments
+venv/
+.venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Testing
+.pytest_cache/
+.coverage
+
+# Generated ML artifacts
+artifacts/
+*.pkl
+*.joblib
+
+# Environment variables
+.env
+
+# IDE settings
+.vscode/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Temporary files
+*.log
+.DS_Store
+'@ | Set-Content -Encoding utf8 .gitignore
+# Pytest and generated files
+.pytest_cache/
+__pycache__/
+artifacts/
+
