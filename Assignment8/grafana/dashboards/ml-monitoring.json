@@ -1,0 +1,19 @@
+{
+  "uid": "ml-monitoring",
+  "title": "Machine Learning API Monitoring",
+  "tags": ["ml", "prometheus", "fastapi"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "5s",
+  "time": {"from": "now-15m", "to": "now"},
+  "panels": [
+    {"id": 1, "type": "stat", "title": "Total Prediction Requests", "gridPos": {"x": 0, "y": 0, "w": 8, "h": 5}, "datasource": {"type": "prometheus", "uid": "prometheus"}, "targets": [{"expr": "sum(ml_prediction_requests_total)", "refId": "A"}], "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []}},
+    {"id": 2, "type": "timeseries", "title": "Prediction Request Rate", "gridPos": {"x": 8, "y": 0, "w": 8, "h": 5}, "datasource": {"type": "prometheus", "uid": "prometheus"}, "targets": [{"expr": "sum(rate(ml_prediction_requests_total[5m]))", "legendFormat": "requests/sec", "refId": "A"}], "fieldConfig": {"defaults": {"unit": "reqps"}, "overrides": []}},
+    {"id": 3, "type": "timeseries", "title": "Average Prediction Latency", "gridPos": {"x": 16, "y": 0, "w": 8, "h": 5}, "datasource": {"type": "prometheus", "uid": "prometheus"}, "targets": [{"expr": "sum(rate(ml_prediction_latency_seconds_sum[5m])) / clamp_min(sum(rate(ml_prediction_latency_seconds_count[5m])), 1e-9)", "legendFormat": "average", "refId": "A"}], "fieldConfig": {"defaults": {"unit": "s"}, "overrides": []}},
+    {"id": 4, "type": "timeseries", "title": "P95 Prediction Latency", "gridPos": {"x": 0, "y": 5, "w": 12, "h": 6}, "datasource": {"type": "prometheus", "uid": "prometheus"}, "targets": [{"expr": "histogram_quantile(0.95, sum by (le) (rate(ml_prediction_latency_seconds_bucket[5m])))", "legendFormat": "P95", "refId": "A"}], "fieldConfig": {"defaults": {"unit": "s"}, "overrides": []}},
+    {"id": 5, "type": "timeseries", "title": "Prediction Error Rate", "gridPos": {"x": 12, "y": 5, "w": 12, "h": 6}, "datasource": {"type": "prometheus", "uid": "prometheus"}, "targets": [{"expr": "sum(rate(ml_prediction_errors_total[5m])) / clamp_min(sum(rate(ml_prediction_requests_total[5m])), 1e-9)", "legendFormat": "error ratio", "refId": "A"}], "fieldConfig": {"defaults": {"unit": "percentunit"}, "overrides": []}},
+    {"id": 6, "type": "stat", "title": "API Availability (Prometheus scrape)", "gridPos": {"x": 0, "y": 11, "w": 8, "h": 5}, "datasource": {"type": "prometheus", "uid": "prometheus"}, "targets": [{"expr": "up{job=\"ml_api\"}", "refId": "A"}], "fieldConfig": {"defaults": {"unit": "none", "mappings": [{"type": "value", "options": {"0": {"text": "DOWN", "color": "red"}, "1": {"text": "UP", "color": "green"}}}]}, "overrides": []}},
+    {"id": 7, "type": "timeseries", "title": "Successful Predictions by Class", "gridPos": {"x": 8, "y": 11, "w": 16, "h": 5}, "datasource": {"type": "prometheus", "uid": "prometheus"}, "targets": [{"expr": "sum by (predicted_class) (rate(ml_predictions_total[5m]))", "legendFormat": "{{predicted_class}}", "refId": "A"}], "fieldConfig": {"defaults": {"unit": "reqps"}, "overrides": []}}
+  ]
+}
